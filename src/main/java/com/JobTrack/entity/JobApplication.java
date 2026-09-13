@@ -4,6 +4,8 @@ import com.JobTrack.Enum.JobStatus;
 import jakarta.persistence.*;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 public class JobApplication {
@@ -17,6 +19,11 @@ public class JobApplication {
    private JobStatus status;
    private String location;
    private LocalDateTime applicationDate;
+
+   @OneToMany(mappedBy = "jobApplication",
+              cascade = CascadeType.ALL,
+              orphanRemoval = true)
+   private List<Interview> interviews = new ArrayList<>();
 
     public Long getId() {
         return id;
@@ -64,5 +71,23 @@ public class JobApplication {
 
     public void setApplicationDate(LocalDateTime applicationDate) {
         this.applicationDate = applicationDate;
+    }
+
+    public List<Interview> getInterviews() {
+        return interviews;
+    }
+
+    public void setInterviews(List<Interview> interviews) {
+        this.interviews = interviews;
+    }
+
+    public void addInterview(Interview interview){
+        interviews.add(interview);
+        interview.setJobApplication(this);
+    }
+
+    public void removeInterview(Interview interview){
+        interviews.remove(interview);
+        interview.setJobApplication(null);
     }
 }

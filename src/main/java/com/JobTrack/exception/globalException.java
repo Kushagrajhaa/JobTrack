@@ -51,6 +51,22 @@ public class globalException {
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(error);
     }
 
+    @ExceptionHandler(InterviewNotFoundException.class)
+    public ResponseEntity<ErrorResponseDTO>handleInterviewNotFoundException(InterviewNotFoundException exception,
+                                                                            HttpServletRequest request){
+
+        ErrorResponseDTO error = new ErrorResponseDTO(
+
+                LocalDateTime.now(),
+                HttpStatus.NOT_FOUND.value(),
+                HttpStatus.NOT_FOUND.getReasonPhrase(),
+                "INTERVIEW_NOT_FOUND!",
+                request.getRequestURI()
+        );
+
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(error);
+    }
+
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public ResponseEntity<ValidationExceptionResponseDTO> handleValidException(MethodArgumentNotValidException exception,
                                                                                HttpServletRequest request){
@@ -72,4 +88,5 @@ public class globalException {
 
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(error);
     }
+
 }
